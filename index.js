@@ -28,7 +28,7 @@ app.get('/api/movies', async(req, res, next) => {
   }
 })
 
-app.get('api/movies/:id', async (req, res, next) => {
+app.get('/api/movies/:id', async (req, res, next) => {
   try {
     const SQL = `SELECT * FROM movies WHERE id=$1;`;
     const response = await client.query(SQL, [req.params.id]);
@@ -58,6 +58,18 @@ app.put('api/movies/:id', async(req, res, next) => {
     next(error)
   }
 })
+
+app.post('/api/movies', async (req, res, next) => {
+  try {
+    const SQL = `
+    INSERT INTO movies (name, stars)
+    VALUES($1, $2)
+    `;
+    const response = await client.query(SQL, [req.body.name, req.body.rank])
+  } catch (error) {
+    next(error)
+  }
+});
 
 const init = async()=> {
   await client.connect();
